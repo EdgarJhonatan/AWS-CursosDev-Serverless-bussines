@@ -38,6 +38,9 @@ const serverlessConfiguration: AWS = {
       name: "group01-delga-${self:provider.stage}-lambda-${self:custom.lambda.type}",
       serverSideEncryption: "AES256",
     },
+    iam: {
+      role: "arn:aws:iam::431224282472:role/aws-group01-role-lambdas-${self:custom.lambda.type}-${self:provider.stage}",
+    },
     lambdaHashingVersion: "20201221",
   },
   // import the function via paths

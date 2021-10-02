@@ -1,20 +1,26 @@
 import "source-map-support/register";
-
 import { middyfy } from "@libs/lambda";
+import { DB } from "../../libs/db";
 
 const list = async () => {
-  const listMedics = [
-    { id: 1, name: "Medic 01" },
-    { id: 2, name: "Medic 02" },
-    { id: 3, name: "Medic 03" },
-    { id: 4, name: "Medic 04" },
-    { id: 5, name: "Medic 05" },
-    { id: 6, name: "Medic 06" },
-  ];
+  //Obtener credenciales
+  const credentials = await DB.getCredencials();
+  //Asigna la base de datos.
+  Object.assign(credentials, { database: "db_citas" });
 
-  return {
-    result: listMedics,
-  };
+  //Conexion con la BD
+  const connection = await DB.getConnection(credentials);
+
+  //Query a la BD
+  const result = await DB.executeStatement(
+    connection,
+    "select idMedico, nombreCompleto from medico",
+    {}
+  );
+  console.log("result", result);
+
+  connection.end();
+  return result;
 };
 
 export const main = middyfy(list);
